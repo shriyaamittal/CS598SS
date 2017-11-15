@@ -1,3 +1,6 @@
+Installation and Download RStudio
+https://www.rstudio.com/products/rstudio/download/#download
+
 To run a file form the RStudio console
 source("Flip.R", echo = TRUE)
 
