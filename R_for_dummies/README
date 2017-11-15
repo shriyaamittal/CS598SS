@@ -1,1 +1,5 @@
+To run a file form the RStudio console
+source("Flip.R", echo = TRUE)
 
+Change directory in console
+setwd("/Users/shriyaa/Desktop/CS598SS/project/check-MCMC")
