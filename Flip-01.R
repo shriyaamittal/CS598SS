@@ -11,11 +11,11 @@ num_cols <- R
 
 
 mydata = read.table(inputfile,sep="\t", fill = TRUE)
-mydata= mydata[, start_num_1:35]
+mydata= mydata[, R-num_cols+1:35]
 mydata_new=mydata
-for ( i in R-num_cols:R)
+for ( i in R-num_cols+1:R)
 {
-  for ( j in R-num_rows:R)
+  for ( j in R-num_rows+1:R)
   {
     if ( !is.na(mydata[i,j]) && runif(1) >= 0.99 && mydata[i,j] == 0 )
       mydata_new[i,j] = 1
