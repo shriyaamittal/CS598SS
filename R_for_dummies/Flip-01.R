@@ -1,13 +1,13 @@
 setwd("/Users/shriyaa/Desktop/CS598SS/project/check-MCMC")
 
-inputfile <- "dis-1.txt"
+inputfile <- "test.txt"
 outputfile <- "mydata_new.txt"
 
 R <- 35
 
 # Use the both below variables as 1 in case of actual MCMC
-start_num_1 <- 1
-start_num_2 <- 1
+num_rows <- 1
+num_cols <- 34
 
 
 mydata = read.table(inputfile,sep="\t", fill = TRUE)
