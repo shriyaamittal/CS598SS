@@ -7,7 +7,7 @@ R <- 35
 
 # Use the both below variables as 1 in case of actual MCMC
 start_num_1 <- 1
-start_num_2 <- 34
+start_num_2 <- 1
 
 
 mydata = read.table(inputfile,sep="\t", fill = TRUE)
