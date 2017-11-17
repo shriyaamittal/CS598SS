@@ -1,7 +1,7 @@
 setwd("/Users/shriyaa/Desktop/CS598SS/project/check-MCMC")
 
-inputfile <- "test.txt"
-outputfile <- "mydata_new.txt"
+inputfile <- "dis-1.txt"
+outputfile <- "mydata_new-01.txt"
 
 R <- 35
 
@@ -11,7 +11,7 @@ num_cols <- R
 
 
 mydata = read.table(inputfile,sep="\t", fill = TRUE)
-mydata= mydata[, R-num_cols+1:35]
+mydata= mydata[, R-num_cols+1:R]
 mydata_new=mydata
 for ( i in R-num_cols+1:R)
 {
