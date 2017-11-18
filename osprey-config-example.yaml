@@ -1,0 +1,43 @@
+
+# osprey configuration file.
+#---------------------------
+# usage:
+#  osprey worker config.yaml
+estimator:
+    eval: |
+        Pipeline([
+                ('cluster', MiniBatchKMeans()),
+                ('msm', MarkovStateModel(n_timescales=5, verbose=False)),
+        ])
+
+# for eval, a python package containing the estimator definitions
+    eval_scope: msmbuilder
+
+
+strategy:
+    name: random # or moe, hyperopt_tpe
+
+search_space:
+  cluster__n_clusters:
+   choices:
+      - 200
+   type: enum
+
+  msm__lag_time:
+      min: 250
+      max: 250
+      type: int
+
+cv:
+  name: shufflesplit
+  params:
+    n_iter: 5
+    test_size: 0.5
+
+dataset_loader:
+  name: joblib
+  params:
+    filenames: dataset_distances.pkl
+
+trials:
+  uri: sqlite:///osprey-database.db
