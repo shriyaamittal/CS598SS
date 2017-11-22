@@ -100,13 +100,6 @@ if __name__ == "__main__":
 
        		new_lines=doMCMC(lines_0_1[0])
 
-#      		print
-#      		print "OMG!!!"
-#      		print
-#      		print lines_0_1[0]
-#      		print new_lines
-#      		print
-
 #      		newScore=calcTestScoresWithPenalty(new_lines,lines_value[0])
        		newScore=calcTestScores(new_lines,lines_value[0])
 
@@ -140,8 +133,6 @@ if __name__ == "__main__":
        			oldFilename=newFilename
        			lines_0_1=readData(newFilename)
        		else:
-#      			print "old "+oldFilename
-#      			print "new "+newFilename
        			print "lines in reject:",
        			print lines_0_1[0]
        			rejectFlag+=1
