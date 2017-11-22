@@ -20,7 +20,7 @@ def calcTestScoresWithPenalty(lines_0_1,lines_value):
        		if (lines_0_1[i]==str(1)):
        			sumScore+=float(lines_value[i])
        			count+=1
-       	return sumScore-count
+       	return sumScore-float(count)/len(lines_0_1)
 
 def calcTestScores(lines_0_1,lines_value):
        	sumScore=0
@@ -95,7 +95,7 @@ if __name__ == "__main__":
        		print
 
        		new_lines=doMCMC(lines_0_1[0])
-       		newScore=calcTestScores(new_lines,lines_value[0])
+       		newScore=calcTestScoresWithPenalty(new_lines,lines_value[0])
 
        		flagAcceptReject=checkAcceptReject(currentScore,newScore)
 
