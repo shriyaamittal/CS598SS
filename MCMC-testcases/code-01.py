@@ -6,12 +6,14 @@ import os
 
 random.seed(time.time())
 
-uniformDistributionCutOff=0.9
+#uniformDistributionCutOff=0.9
 
 iterationsForConvergence=5
 
 inputfilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/test.txt'
 inputvaluefilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/values-01.txt'
+
+solutionfilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/solution-test.txt'
 
 def calcTestScoresWithPenalty(lines_0_1,lines_value):
        	sumScore=0
@@ -77,6 +79,15 @@ def checkAcceptReject(old,new):
 
        	return flag
 
+def writeData(filename,array):
+       		f=open(filename,'wb')
+       		for i in range(len(array)-1):
+       			f.write(array[i]+'\t')
+       		i+=1
+       		f.write(array[i]+'\n')
+       		f.close()
+
+
 if __name__ == "__main__":
 
        	iteration=0
@@ -94,8 +105,7 @@ if __name__ == "__main__":
        		iteration+=1
 
        		print
-       		print "iteration ",
-       		print iteration
+       		print "iteration "+str(iteration)
        		print
 
        		new_lines=doMCMC(lines_0_1[0])
@@ -114,27 +124,13 @@ if __name__ == "__main__":
        			oldFilename="old-0-1-iter"+str(iteration)+'.txt'
        			newFilename="new-0-1-iter"+str(iteration)+'.txt'
 
-       			f=open(oldFilename,'wb')
-       			for i in range(len(lines_0_1[0])-1):
-       				print i
-       				f.write(lines_0_1[0][i]+'\t')
-       			i+=1
-       			f.write(lines_0_1[0][i]+'\n')
-       			f.close()
-
-       			f=open(newFilename,'wb')
-       			for i in range(len(new_lines)-1):
-       				f.write(new_lines[i]+'\t')
-       			i+=1
-       			f.write(new_lines[i]+'\n')
-       			f.close()
+       			writeData(oldFilename,lines_0_1[0])
+       			writeData(newFilename,new_lines)
 
        			currentScore=newScore
        			oldFilename=newFilename
        			lines_0_1=readData(newFilename)
        		else:
-       			print "lines in reject:",
-       			print lines_0_1[0]
        			rejectFlag+=1
        			if (rejectFlag==iterationsForConvergence):
        				break;
@@ -143,5 +139,8 @@ if __name__ == "__main__":
 
        	print
        	print "Final score: "+str(currentScore)
+
+       	writeData(solutionfilename,lines_0_1[0])
+
        	print "Final choice: ",
        	print lines_0_1[0]
