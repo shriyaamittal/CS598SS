@@ -30,18 +30,21 @@ def calcTestScores(lines_0_1,lines_value):
        	return sumScore
 
 def doMCMC(lines):
+
+       	lines_mod=lines[:]
+
        	print "in MCMC"
        	print "old ",
        	print lines
 
        	i=random.randint(0, len(lines)-1)
        	if (lines[i]==str(1)):
-       		lines[i]=str(0)
+       		lines_mod[i]=str(0)
        	elif (lines[i]==str(0)):
-       		lines[i]=str(1)
+       		lines_mod[i]=str(1)
 
        	print "new ",
-       	print lines
+       	print lines_mod
 
 #      	for i in range(len(lines)):
 #      		r=random.random()
@@ -50,7 +53,7 @@ def doMCMC(lines):
 #      				lines[i]=str(0)
 #      			elif (lines[i]==str(0)):
 #      				lines[i]=str(1)
-       	return lines
+       	return lines_mod
 
 def checkAcceptReject(old,new):
 
@@ -81,6 +84,7 @@ if __name__ == "__main__":
        	oldFilename=inputfilename
        	lines_value=readData(inputvaluefilename)
        	lines_0_1=readData(oldFilename)
+#      	currentScore=calcTestScoresWithPenalty(lines_0_1[0],lines_value[0])
        	currentScore=calcTestScores(lines_0_1[0],lines_value[0])
 
        	rejectFlag=0
@@ -95,7 +99,16 @@ if __name__ == "__main__":
        		print
 
        		new_lines=doMCMC(lines_0_1[0])
-       		newScore=calcTestScoresWithPenalty(new_lines,lines_value[0])
+
+#      		print
+#      		print "OMG!!!"
+#      		print
+#      		print lines_0_1[0]
+#      		print new_lines
+#      		print
+
+#      		newScore=calcTestScoresWithPenalty(new_lines,lines_value[0])
+       		newScore=calcTestScores(new_lines,lines_value[0])
 
        		flagAcceptReject=checkAcceptReject(currentScore,newScore)
 
@@ -107,24 +120,37 @@ if __name__ == "__main__":
        			rejectFlag=0
        			oldFilename="old-0-1-iter"+str(iteration)+'.txt'
        			newFilename="new-0-1-iter"+str(iteration)+'.txt'
-       			cmd="cp "+inputfilename+" "+oldFilename
-       			os.system(cmd)
+
+       			f=open(oldFilename,'wb')
+       			for i in range(len(lines_0_1[0])-1):
+       				print i
+       				f.write(lines_0_1[0][i]+'\t')
+       			i+=1
+       			f.write(lines_0_1[0][i]+'\n')
+       			f.close()
+
        			f=open(newFilename,'wb')
        			for i in range(len(new_lines)-1):
        				f.write(new_lines[i]+'\t')
        			i+=1
        			f.write(new_lines[i]+'\n')
        			f.close()
+
        			currentScore=newScore
        			oldFilename=newFilename
-       			lines_0_1=readData(oldFilename)
+       			lines_0_1=readData(newFilename)
        		else:
 #      			print "old "+oldFilename
 #      			print "new "+newFilename
+       			print "lines in reject:",
+       			print lines_0_1[0]
        			rejectFlag+=1
        			if (rejectFlag==iterationsForConvergence):
        				break;
 #      		cmd="sleep 10"
 #      		os.system(cmd)
 
+       	print
        	print "Final score: "+str(currentScore)
+       	print "Final choice: ",
+       	print lines_0_1[0]
