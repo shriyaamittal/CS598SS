@@ -8,7 +8,7 @@ random.seed(time.time())
 
 uniformDistributionCutOff=0.9
 
-iterationsForConvergence=20
+iterationsForConvergence=5
 
 inputfilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/test.txt'
 inputvaluefilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/values-01.txt'
@@ -30,11 +30,18 @@ def calcTestScores(lines_0_1,lines_value):
        	return sumScore
 
 def doMCMC(lines):
+       	print "in MCMC"
+       	print "old ",
+       	print lines
+
        	i=random.randint(0, len(lines)-1)
        	if (lines[i]==str(1)):
        		lines[i]=str(0)
        	elif (lines[i]==str(0)):
        		lines[i]=str(1)
+
+       	print "new ",
+       	print lines
 
 #      	for i in range(len(lines)):
 #      		r=random.random()
@@ -53,9 +60,13 @@ def checkAcceptReject(old,new):
        		old+=pseudocount
 
        	val=float(new)/old
+       	print "val "+str(val)
        	A=min(1,val)
+       	print "A "+str(A)
 
        	r=random.random()
+       	print "r "+str(r)
+
        	if (r<=A):
        		flag="Accept"
        	else:
@@ -75,15 +86,21 @@ if __name__ == "__main__":
        	rejectFlag=0
 
        	while (True):
+
        		iteration+=1
+
+       		print
+       		print "iteration ",
+       		print iteration
+       		print
 
        		new_lines=doMCMC(lines_0_1[0])
        		newScore=calcTestScores(new_lines,lines_value[0])
 
        		flagAcceptReject=checkAcceptReject(currentScore,newScore)
 
-       		print currentScore
-       		print newScore
+       		print "currentScore "+str(currentScore)
+       		print "newScore "+str(newScore)
        		print flagAcceptReject
 
        		if flagAcceptReject=="Accept":
@@ -93,13 +110,21 @@ if __name__ == "__main__":
        			cmd="cp "+inputfilename+" "+oldFilename
        			os.system(cmd)
        			f=open(newFilename,'wb')
-       			for i in range(len(new_lines)):
+       			for i in range(len(new_lines)-1):
        				f.write(new_lines[i]+'\t')
+       			i+=1
+       			f.write(new_lines[i]+'\n')
        			f.close()
        			currentScore=newScore
+       			oldFilename=newFilename
+       			lines_0_1=readData(oldFilename)
        		else:
+#      			print "old "+oldFilename
+#      			print "new "+newFilename
        			rejectFlag+=1
        			if (rejectFlag==iterationsForConvergence):
        				break;
+#      		cmd="sleep 10"
+#      		os.system(cmd)
 
        	print "Final score: "+str(currentScore)
