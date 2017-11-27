@@ -24,7 +24,6 @@ do
        	cp readData.py $folder
        	cd $folder
 
-       	## Run the gibbs.py in the folder, 10 time
        	outputfolder=output_files
        	mkdir $outputfolder
 
