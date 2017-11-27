@@ -1,0 +1,38 @@
+##
+#      	Generate Test Cases
+#      	You can change the number of test cases and the sizes of the input file in the first few lines of the code, code-02.py
+##
+
+ipython code-02.py
+echo "Datasets generation completed."
+
+##
+#      	Run code for multiple test cases, also multiple times.
+#      	How many times? ${nTimes}
+##
+
+nTimes=5
+
+ls -d data*/ > listDatasets
+
+while read line;
+do
+       	echo "Running tests for "+$line
+       	folder=$line
+       	echo $folder
+       	cp code-01.py $folder
+       	cp readData.py $folder
+       	cd $folder
+
+       	## Run the gibbs.py in the folder, 10 time
+       	outputfolder=output_files
+       	mkdir $outputfolder
+
+       	for (( i=1; i<=$((nTimes+1)); i++ ))
+       	do
+       		ipython code-01.py
+       		mkdir $outputfolder/run_${i}
+       		mv new* old* $outputfolder/run_${i}
+       	done
+       	cd ..
+done < listDatasets
