@@ -11,7 +11,7 @@ random.seed(time.time())
 iterationsForConvergence=5
 
 inputfilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/test.txt'
-inputvaluefilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/values-01.txt'
+inputvaluefilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/values.txt'
 
 solutionfilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/solution-test.txt'
 
