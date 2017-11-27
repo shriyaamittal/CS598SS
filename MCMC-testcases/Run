@@ -27,7 +27,7 @@ do
        	outputfolder=output_files
        	mkdir $outputfolder
 
-       	for (( i=1; i<=$((nTimes+1)); i++ ))
+       	for (( i=1; i<=$((nTimes)); i++ ))
        	do
        		ipython code-01.py
        		mkdir $outputfolder/run_${i}
