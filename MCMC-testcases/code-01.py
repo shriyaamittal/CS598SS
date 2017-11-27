@@ -10,10 +10,10 @@ random.seed(time.time())
 
 iterationsForConvergence=5
 
-inputfilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/test.txt'
-inputvaluefilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/values.txt'
+inputfilename='./test.txt'
+inputvaluefilename='./values.txt'
 
-solutionfilename='/Users/shriyaa/Desktop/CS598SS/project/my-mcmc-code/solution-test.txt'
+solutionfilename='./solution.txt'
 
 def calcTestScoresWithPenalty(lines_0_1,lines_value):
        	sumScore=0
