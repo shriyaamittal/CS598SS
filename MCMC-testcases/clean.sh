@@ -16,3 +16,6 @@ rm old-0-1-iter6*
 rm old-0-1-iter7*
 rm old-0-1-iter8*
 rm old-0-1-iter9*
+
+rmdir data_size*
+rm -r data_size*
