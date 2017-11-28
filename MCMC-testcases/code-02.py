@@ -4,9 +4,11 @@ import os
 
 random.seed(time.time())
 
-#fileSizes=[2,3,4,5,10,15]
-fileSizes=[2,3,4,5]
+#fileSizes=[3,4,5,10,15]
+fileSizes=[3,4,5]
 numCasesEachFileSize=5
+
+k=2
 
 if __name__ == "__main__":
 
@@ -24,12 +26,23 @@ if __name__ == "__main__":
 
        			f=open('test.txt','wb')
 
-       			for m in range(test_case_size-1):
-       				x=random.randint(0,1)
-       				f.write(str(x)+'\t')
+       			choose=random.sample(range(test_case_size),k)
 
-       			x=random.randint(0,1)
-       			f.write(str(x)+'\n')
+       			for m in range(test_case_size-1):
+       				if m in choose:
+       					f.write(str(1)+'\t')
+       				else:
+       					f.write(str(0)+'\t')
+#      				x=random.randint(0,1)
+#      				f.write(str(x)+'\t')
+
+       			m=m+1
+#      			x=random.randint(0,1)
+       			if m in choose:
+       				f.write(str(1)+'\n')
+       			else:
+       				f.write(str(0)+'\n')
+#      			f.write(str(x)+'\n')
        			f.close()
 
        			f=open('values.txt','wb')
