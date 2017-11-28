@@ -4,7 +4,8 @@ import os
 
 random.seed(time.time())
 
-fileSizes=[2,3,4,5,10,15]
+#fileSizes=[2,3,4,5,10,15]
+fileSizes=[2,3,4,5]
 numCasesEachFileSize=5
 
 if __name__ == "__main__":
