@@ -32,7 +32,10 @@ do
        	do
        		ipython code-01.py
        		mkdir $outputfolder/run_${i}
-       		mv new* old* solution* $outputfolder/run_${i}
+       		find new* -type f | xargs -I mv "{}" $outputfolder/run_${i}
+       		find old* -type f | xargs -I mv "{}" $outputfolder/run_${i}
+       		mv solution* $outputfolder/run_${i}
+       		mv iter* $outputfolder/run_${i}
        	done
        	cd ..
 done < listDatasets
