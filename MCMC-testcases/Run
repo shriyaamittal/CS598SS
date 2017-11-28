@@ -3,6 +3,7 @@
 #      	You can change the number of test cases and the sizes of the input file in the first few lines of the code, code-02.py
 ##
 
+source clean.sh
 ipython code-02.py
 echo "Datasets generation completed."
 
@@ -31,7 +32,7 @@ do
        	do
        		ipython code-01.py
        		mkdir $outputfolder/run_${i}
-       		mv new* old* $outputfolder/run_${i}
+       		mv new* old* solution* $outputfolder/run_${i}
        	done
        	cd ..
 done < listDatasets
