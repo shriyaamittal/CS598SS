@@ -3,6 +3,7 @@ import numpy as np
 import random
 import time
 import os
+import sys
 
 random.seed(time.time())
 
@@ -14,6 +15,8 @@ inputfilename='./test.txt'
 inputvaluefilename='./values.txt'
 
 solutionfilename='./solution.txt'
+
+iterationfile='./iterations.txt'
 
 def calcTestScoresWithPenalty(lines_0_1,lines_value):
        	sumScore=0
@@ -31,7 +34,7 @@ def calcTestScores(lines_0_1,lines_value):
        			sumScore+=float(lines_value[i])
        	return sumScore
 
-def doMCMC(lines):
+def doMCMC(lines,k):
 
        	lines_mod=lines[:]
 
@@ -39,15 +42,25 @@ def doMCMC(lines):
        	print "old ",
        	print lines
 
-       	i=random.randint(0, len(lines)-1)
-       	if (lines[i]==str(1)):
-       		lines_mod[i]=str(0)
-       	elif (lines[i]==str(0)):
-       		lines_mod[i]=str(1)
+       	choose=random.sample(range(len(lines)),k)
+       	print choose
 
-       	print "new ",
-       	print lines_mod
+       	for i in range(len(lines)):
+       		if i in choose:
+       			print i, choose, "True"
+       			lines_mod[i]=str(1)
+       		else:
+       			print i, choose, "False"
+       			lines_mod[i]=str(0)
 
+
+#########
+#      	i=random.randint(0, len(lines)-1)
+#      	if (lines[i]==str(1)):
+#      		lines_mod[i]=str(0)
+#      	elif (lines[i]==str(0)):
+#      		lines_mod[i]=str(1)
+#########
 #      	for i in range(len(lines)):
 #      		r=random.random()
 #      		if (r>uniformDistributionCutOff):
@@ -55,6 +68,11 @@ def doMCMC(lines):
 #      				lines[i]=str(0)
 #      			elif (lines[i]==str(0)):
 #      				lines[i]=str(1)
+#########
+
+       	print "new ",
+       	print lines_mod
+
        	return lines_mod
 
 def checkAcceptReject(old,new):
@@ -95,6 +113,10 @@ if __name__ == "__main__":
        	oldFilename=inputfilename
        	lines_value=readData(inputvaluefilename)
        	lines_0_1=readData(oldFilename)
+
+#      	k=sys.argv[1]
+       	k=2
+
 #      	currentScore=calcTestScoresWithPenalty(lines_0_1[0],lines_value[0])
        	currentScore=calcTestScores(lines_0_1[0],lines_value[0])
 
@@ -108,7 +130,7 @@ if __name__ == "__main__":
        		print "iteration "+str(iteration)
        		print
 
-       		new_lines=doMCMC(lines_0_1[0])
+       		new_lines=doMCMC(lines_0_1[0],k)
 
 #      		newScore=calcTestScoresWithPenalty(new_lines,lines_value[0])
        		newScore=calcTestScores(new_lines,lines_value[0])
@@ -121,6 +143,7 @@ if __name__ == "__main__":
 
        		if flagAcceptReject=="Accept":
        			rejectFlag=0
+
        			oldFilename="old-0-1-iter"+str(iteration)+'.txt'
        			newFilename="new-0-1-iter"+str(iteration)+'.txt'
 
@@ -134,6 +157,12 @@ if __name__ == "__main__":
        			rejectFlag+=1
        			if (rejectFlag==iterationsForConvergence):
        				break;
+
+       		if (iteration>4):
+       			cmd="rm old-0-1-iter"+str(iteration-1)+".txt"
+       			os.system(cmd)
+       			cmd="rm new-0-1-iter"+str(iteration-1)+".txt"
+       			os.system(cmd)
 #      		cmd="sleep 10"
 #      		os.system(cmd)
 
@@ -141,6 +170,10 @@ if __name__ == "__main__":
        	print "Final score: "+str(currentScore)
 
        	writeData(solutionfilename,lines_0_1[0])
+
+       	f=open(iterationfile,'wb')
+       	f.write(str(iteration)+'\n')
+       	f.close()
 
        	print "Final choice: ",
        	print lines_0_1[0]
