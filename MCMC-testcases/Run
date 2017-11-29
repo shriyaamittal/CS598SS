@@ -1,10 +1,10 @@
 ##
 #      	Generate Test Cases
-#      	You can change the number of test cases and the sizes of the input file in the first few lines of the code, code-02.py
+#      	You can change the number of test cases and the sizes of the input file in the first few lines of the code, generateTestCases.py
 ##
 
 source clean.sh
-ipython code-02.py
+ipython generateTestCases.py
 echo "Datasets generation completed."
 
 ##
@@ -12,7 +12,7 @@ echo "Datasets generation completed."
 #      	How many times? ${nTimes}
 ##
 
-nTimes=5
+nTimes=10
 
 ls -d data*/ > listDatasets
 
@@ -21,7 +21,7 @@ do
        	echo "Running tests for "+$line
        	folder=$line
        	echo $folder
-       	cp code-01.py $folder
+       	cp runMCMCTestCases.py $folder
        	cp readData.py $folder
        	cd $folder
 
@@ -30,7 +30,7 @@ do
 
        	for (( i=1; i<=$((nTimes)); i++ ))
        	do
-       		ipython code-01.py
+       		ipython runMCMCTestCases.py
        		mkdir $outputfolder/run_${i}
        		find new* -type f | xargs -I mv "{}" $outputfolder/run_${i}
        		find old* -type f | xargs -I mv "{}" $outputfolder/run_${i}
