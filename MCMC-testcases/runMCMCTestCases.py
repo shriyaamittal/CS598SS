@@ -7,16 +7,14 @@ import sys
 
 random.seed(time.time())
 
-#uniformDistributionCutOff=0.9
-
 iterationsForConvergence=5
 
 inputfilename='./test.txt'
 inputvaluefilename='./values.txt'
-
 solutionfilename='./solution.txt'
-
 iterationfile='./iterations.txt'
+
+MAX_ITERATIONS=50000
 
 def calcTestScoresWithPenalty(lines_0_1,lines_value):
        	sumScore=0
@@ -38,21 +36,20 @@ def doMCMC(lines,k):
 
        	lines_mod=lines[:]
 
+       	"""
        	print "in MCMC"
        	print "old ",
        	print lines
+       	"""
 
        	choose=random.sample(range(len(lines)),k)
        	print choose
 
        	for i in range(len(lines)):
        		if i in choose:
-       			print i, choose, "True"
        			lines_mod[i]=str(1)
        		else:
-       			print i, choose, "False"
        			lines_mod[i]=str(0)
-
 
 #########
 #      	i=random.randint(0, len(lines)-1)
@@ -70,8 +67,10 @@ def doMCMC(lines,k):
 #      				lines[i]=str(1)
 #########
 
+       	"""
        	print "new ",
        	print lines_mod
+       	"""
 
        	return lines_mod
 
@@ -83,12 +82,9 @@ def checkAcceptReject(old,new):
        		old+=pseudocount
 
        	val=float(new)/old
-       	print "val "+str(val)
        	A=min(1,val)
-       	print "A "+str(A)
 
        	r=random.random()
-       	print "r "+str(r)
 
        	if (r<=A):
        		flag="Accept"
@@ -115,7 +111,7 @@ if __name__ == "__main__":
        	lines_0_1=readData(oldFilename)
 
 #      	k=sys.argv[1]
-       	k=2
+       	k=4
 
 #      	currentScore=calcTestScoresWithPenalty(lines_0_1[0],lines_value[0])
        	currentScore=calcTestScores(lines_0_1[0],lines_value[0])
@@ -163,6 +159,9 @@ if __name__ == "__main__":
        			os.system(cmd)
        			cmd="rm new-0-1-iter"+str(iteration-1)+".txt"
        			os.system(cmd)
+
+       		if (iteration==MAX_ITERATIONS):
+       			break;
 #      		cmd="sleep 10"
 #      		os.system(cmd)
 
@@ -172,8 +171,15 @@ if __name__ == "__main__":
        	writeData(solutionfilename,lines_0_1[0])
 
        	f=open(iterationfile,'wb')
-       	f.write(str(iteration)+'\n')
+       	f.write("iterations: "+str(iteration)+'\n')
+       	f.write("k: "+str(k)+'\n')
+       	f.write("score: "+str(currentScore)+'\n')
        	f.close()
+
+       	cmd="rm old-0-1-iter*.txt"
+       	os.system(cmd)
+       	cmd="rm new-0-1-iter*.txt"
+       	os.system(cmd)
 
        	print "Final choice: ",
        	print lines_0_1[0]
