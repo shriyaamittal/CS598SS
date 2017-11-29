@@ -25,7 +25,9 @@ def calcTestScoresWithPenalty(lines_0_1,lines_value):
        			count+=1
        	return sumScore-float(count)/len(lines_0_1)
 
-def doMCMC(lines,k):
+def doMCMC(lines):
+
+       	k=random.randrange(2,len(lines))
 
        	lines_mod=lines[:]
 
@@ -64,9 +66,7 @@ def doMCMC(lines,k):
        	print lines_mod
        	"""
 
-       	new_k=random.randrange(2,len(lines))
-
-       	return lines_mod, new_k
+       	return lines_mod
 
 def checkAcceptReject(old,new):
 
@@ -104,9 +104,6 @@ if __name__ == "__main__":
        	lines_value=readData(inputvaluefilename)
        	lines_0_1=readData(oldFilename)
 
-#      	k=sys.argv[1]
-       	k=2
-
        	currentScore=calcTestScoresWithPenalty(lines_0_1[0],lines_value[0])
 
        	rejectFlag=0
@@ -119,7 +116,7 @@ if __name__ == "__main__":
        		print "iteration "+str(iteration)
        		print
 
-       		new_lines,k=doMCMC(lines_0_1[0],k)
+       		new_lines=doMCMC(lines_0_1[0])
 
        		newScore=calcTestScoresWithPenalty(new_lines,lines_value[0])
 
@@ -162,9 +159,16 @@ if __name__ == "__main__":
 
        	writeData(solutionfilename,lines_0_1[0])
 
+       	final_k=0
+       	for i in range(len(lines_0_1[0])):
+       		if lines_0_1[0][i]==str(1):
+       			final_k+=1
+
+       	print "k is "+str(final_k)
+
        	f=open(iterationfile,'wb')
        	f.write("iterations: "+str(iteration)+'\n')
-       	f.write("k: "+str(k)+'\n')
+       	f.write("k: "+str(final_k)+'\n')
        	f.write("score: "+str(currentScore)+'\n')
        	f.close()
 
