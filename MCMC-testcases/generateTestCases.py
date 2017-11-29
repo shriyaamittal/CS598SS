@@ -4,11 +4,11 @@ import os
 
 random.seed(time.time())
 
-#fileSizes=[3,4,5,10,15]
-fileSizes=[3,4,5]
+fileSizes=[5,10,15,20]
+#fileSizes=[3,4,5]
 numCasesEachFileSize=5
 
-k=2
+k=4
 
 if __name__ == "__main__":
 
