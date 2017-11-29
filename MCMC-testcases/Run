@@ -16,12 +16,14 @@ nTimes=10
 
 ls -d data*/ > listDatasets
 
+MCMCCode='runMCMCTestCasesScore2.py'
+
 while read line;
 do
        	echo "Running tests for "+$line
        	folder=$line
        	echo $folder
-       	cp runMCMCTestCases.py $folder
+       	cp ${MCMCCode} $folder
        	cp readData.py $folder
        	cd $folder
 
@@ -30,7 +32,7 @@ do
 
        	for (( i=1; i<=$((nTimes)); i++ ))
        	do
-       		ipython runMCMCTestCases.py
+       		ipython ${MCMCCode}
        		mkdir $outputfolder/run_${i}
        		find new* -type f | xargs -I mv "{}" $outputfolder/run_${i}
        		find old* -type f | xargs -I mv "{}" $outputfolder/run_${i}
