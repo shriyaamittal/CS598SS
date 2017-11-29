@@ -14,16 +14,7 @@ inputvaluefilename='./values.txt'
 solutionfilename='./solution.txt'
 iterationfile='./iterations.txt'
 
-MAX_ITERATIONS=50000
-
-def calcTestScoresWithPenalty(lines_0_1,lines_value):
-       	sumScore=0
-       	count=0
-       	for i in range(len(lines_0_1)):
-       		if (lines_0_1[i]==str(1)):
-       			sumScore+=float(lines_value[i])
-       			count+=1
-       	return sumScore-float(count)/len(lines_0_1)
+MAX_ITERATIONS=10000
 
 def calcTestScores(lines_0_1,lines_value):
        	sumScore=0
@@ -43,7 +34,6 @@ def doMCMC(lines,k):
        	"""
 
        	choose=random.sample(range(len(lines)),k)
-       	print choose
 
        	for i in range(len(lines)):
        		if i in choose:
@@ -113,7 +103,6 @@ if __name__ == "__main__":
 #      	k=sys.argv[1]
        	k=4
 
-#      	currentScore=calcTestScoresWithPenalty(lines_0_1[0],lines_value[0])
        	currentScore=calcTestScores(lines_0_1[0],lines_value[0])
 
        	rejectFlag=0
@@ -128,7 +117,6 @@ if __name__ == "__main__":
 
        		new_lines=doMCMC(lines_0_1[0],k)
 
-#      		newScore=calcTestScoresWithPenalty(new_lines,lines_value[0])
        		newScore=calcTestScores(new_lines,lines_value[0])
 
        		flagAcceptReject=checkAcceptReject(currentScore,newScore)
