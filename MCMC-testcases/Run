@@ -16,8 +16,7 @@ nTimes=10
 
 ls -d data*/ > listDatasets
 
-MCMCCode='runMCMCTestCasesScore2.py'
-#MCMCCode='runMCMCTestCases.py'
+MCMCCode='runMCMCTestCases.py'
 
 while read line;
 do
