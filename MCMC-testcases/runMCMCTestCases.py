@@ -50,9 +50,9 @@ def doMCMC(lines,k):
        	choose_index_for_k=random.choice(index_not_k)
 
        	for i in range(len(lines)):
-       		if i is choose_index_from_k:
+       		if i==choose_index_from_k:
        			lines_mod[i]=str(0)
-       		if i is choose_index_for_k:
+       		elif i==choose_index_for_k:
        			lines_mod[i]=str(1)
 
        	"""
