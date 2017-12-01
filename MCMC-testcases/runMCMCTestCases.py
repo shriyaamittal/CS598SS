@@ -4,17 +4,21 @@ import random
 import time
 import os
 import sys
-
 random.seed(time.time())
 
+# Macros
+BEST_SCORE=0
+BEST_CHOICE=[]
+MAX_ITERATIONS=100
 iterationsForConvergence=5
+CHOOSE_ELEMENTS=2
 
+# Input file paths
 inputfilename='./test.txt'
 inputvaluefilename='./values.txt'
 solutionfilename='./solution.txt'
 iterationfile='./iterations.txt'
 
-MAX_ITERATIONS=10000
 
 def calcTestScores(lines_0_1,lines_value):
        	sumScore=0
@@ -33,29 +37,23 @@ def doMCMC(lines,k):
        	print lines
        	"""
 
-       	choose=random.sample(range(len(lines)),k)
+       	index_k=[]
+       	index_not_k=[]
 
        	for i in range(len(lines)):
-       		if i in choose:
-       			lines_mod[i]=str(1)
+       		if (lines[i]==str(0)):
+       			index_not_k.append(i)
        		else:
-       			lines_mod[i]=str(0)
+       			index_k.append(i)
 
-#########
-#      	i=random.randint(0, len(lines)-1)
-#      	if (lines[i]==str(1)):
-#      		lines_mod[i]=str(0)
-#      	elif (lines[i]==str(0)):
-#      		lines_mod[i]=str(1)
-#########
-#      	for i in range(len(lines)):
-#      		r=random.random()
-#      		if (r>uniformDistributionCutOff):
-#      			if (lines[i]==str(1)):
-#      				lines[i]=str(0)
-#      			elif (lines[i]==str(0)):
-#      				lines[i]=str(1)
-#########
+       	choose_index_from_k=random.choice(index_k)
+       	choose_index_for_k=random.choice(index_not_k)
+
+       	for i in range(len(lines)):
+       		if i is choose_index_from_k:
+       			lines_mod[i]=str(0)
+       		if i is choose_index_for_k:
+       			lines_mod[i]=str(1)
 
        	"""
        	print "new ",
@@ -100,8 +98,7 @@ if __name__ == "__main__":
        	lines_value=readData(inputvaluefilename)
        	lines_0_1=readData(oldFilename)
 
-#      	k=sys.argv[1]
-       	k=4
+       	k=CHOOSE_ELEMENTS
 
        	currentScore=calcTestScores(lines_0_1[0],lines_value[0])
 
@@ -137,10 +134,15 @@ if __name__ == "__main__":
        			currentScore=newScore
        			oldFilename=newFilename
        			lines_0_1=readData(newFilename)
+
        		else:
        			rejectFlag+=1
        			if (rejectFlag==iterationsForConvergence):
        				break;
+
+       		if newScore>BEST_SCORE:
+       			BEST_SCORE=newScore
+       			BEST_CHOICE=lines_0_1[0]
 
        		if (iteration>4):
        			cmd="rm old-0-1-iter"+str(iteration-1)+".txt"
@@ -155,13 +157,14 @@ if __name__ == "__main__":
 
        	print
        	print "Final score: "+str(currentScore)
+       	print "Final BEST score: "+str(BEST_SCORE)
 
-       	writeData(solutionfilename,lines_0_1[0])
+       	writeData(solutionfilename,BEST_CHOICE)
 
        	f=open(iterationfile,'wb')
        	f.write("iterations: "+str(iteration)+'\n')
        	f.write("k: "+str(k)+'\n')
-       	f.write("score: "+str(currentScore)+'\n')
+       	f.write("score: "+str(BEST_SCORE)+'\n')
        	f.close()
 
        	cmd="rm old-0-1-iter*.txt"
@@ -171,3 +174,5 @@ if __name__ == "__main__":
 
        	print "Final choice: ",
        	print lines_0_1[0]
+       	print "Final BEST choice: ",
+       	print BEST_CHOICE
