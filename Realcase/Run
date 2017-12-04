@@ -1,0 +1,44 @@
+##
+#	Generate Test Cases
+#	You can change the number of test cases and the sizes of the input file in the first few lines of the code, generateTestCases.py
+#	In a real case, this is used to generate a random starting point
+##
+
+source clean.sh
+ipython generateTestCases.py
+echo "Datasets generation completed."
+
+##
+#	Run code for multiple test cases, also multiple times.
+#	How many times? ${nTimes}
+##
+
+nTimes=2
+
+ls -d data*/ > listDatasets
+
+while read line;
+do
+	echo "Running for "+$line
+	folder=$line
+	echo $folder
+	cp readData.py $folder
+	cp *.py $folder
+	cp osprey-config-example.yaml $folder
+	cd $folder
+	
+	outputfolder=output_files
+	mkdir $outputfolder
+
+	for (( i=1; i<=$((nTimes)); i++ ))
+	do
+		ipython runMCMCRealCases.py
+		mkdir $outputfolder/run_${i}
+		find new* -type f | xargs -I mv "{}" $outputfolder/run_${i}
+		find old* -type f | xargs -I mv "{}" $outputfolder/run_${i}
+		mv solution* $outputfolder/run_${i}
+		mv iter* $outputfolder/run_${i}
+		mv track.txt $outputfolder/run_${i}
+	done
+	cd ..
+done < listDatasets
