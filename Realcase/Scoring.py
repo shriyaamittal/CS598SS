@@ -31,10 +31,10 @@ def createDatasetFile(lines):
        		t=md.load(file,top=topfile)
        		dist=md.compute_contacts(t,cont,scheme='ca')
        		ftr=[np.ndarray.tolist(dist[0][i][:]) for i in range(len(dist[0]))]
-       		np.save(path+'/'+file.split('/')[-1]+'.npy', ftr)
+       		np.save(file.split('/')[-1]+'.npy', ftr)
 
        	dataset=[]
-       	for file in sorted(glob.glob(path+'/*.npy')):
+       	for file in sorted(glob.glob('./*dcd.npy')):
        		a=np.load(file)
        		dataset.append(a)
 
