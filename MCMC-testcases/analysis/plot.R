@@ -1,21 +1,40 @@
+k=10
+case2_itr_mtrx_595=matrix(0,50,5)
 
-case2_itr_mtrx_5=matrix(0,50,4)
 for(j in 1:5){
-rundatasize=paste0("data_size5_",j)
-wd1=paste0("C:\\Users\\Zainab\\Desktop\\CS598\\TestCase2Results\\",rundatasize)
+rundatasize=paste0("data_size595_",j)
+wd1=paste0("C:\\Users\\Zainab\\Desktop\\CS598\\BigData\\",rundatasize)
+setwd(wd1)
+values=read.table('values.txt')
+max_sum={}
+for(m in 1:k)
+{
+  max_sum[m]=max(values)
+  values=values[-which.max(values)]
+}
 
 for(i in 1:10){
 runfile=paste0("run_",i)
 wd=paste0( wd1,"\\output_files\\",runfile)
 setwd(wd)
 itr=read.table('iterations.txt', sep = " ",header = F )
-case2_itr_mtrx_5[10*(j-1)+i,2:4]=t(itr[,2])
-case2_itr_mtrx_5[10*(j-1)+i,1]=i
+case2_itr_mtrx_595[10*(j-1)+i,2:4]=t(itr[,2])
+case2_itr_mtrx_595[10*(j-1)+i,1]=i
+case2_itr_mtrx_595[10*(j-1)+i,5]=sum(max_sum)
 }
 }
 case2_itr_mtrx=rbind(case2_itr_mtrx_5,case2_itr_mtrx_10,case2_itr_mtrx_15,case2_itr_mtrx_20)
 case2_itr_mtrx=data.frame(case2_itr_mtrx)
-case2_itr_mtrx[1:50,5]=5
+
+###checkforconverge
+case2_itr_mtrx[,6]=case2_itr_mtrx[,5]-case2_itr_mtrx[,4]
+
+
+###col7
+for(i in 1:4)
+{case2_itr_mtrx[(1+(i-1)*50):(50+(i-1)*50),7]=len[i]
+
+}
 len=seq(5,20,5)
 restriction=seq(2,4,2)
 array_4=matrix(0,length(len),2)
@@ -69,11 +88,29 @@ array_4[j,2]=count
           lty = 1, merge = TRUE)   #, trace = TRUE)
   
   
-  
-  
+  setwd("C:\\Users\\Zainab\\Desktop\\CS598\\BigData")
+  colnames(case2_itr_mtrx_595)=c("run","iterations", "k", "sum", "max_sum")
+  write.table(case2_itr_mtrx_595,'595run.txt')
   ##########
   
-  mydata=case2_itr_mtrx
+  colnames(case2_itr_mtrx)=c("run","iterations", "k", "sum", "max_sum","converge", "lenght_array")
+  case2_itr_mtrx$converge=ifelse(case2_itr_mtrx$converge==0,0,1)
+  mydata=case2_itr_mtrx[1:200,]
+  case3_plots=matrix(0, length(len),4)
+  for(i in 1:length(len))
+  {
+    case3_plots[i,1]=len[i]
+    case3_plots[i,4]=length(which(mydata$converge==0)[mydata$lenght_array==len[i]])/length(which(mydata$lenght_array==len[i]))
+  }
+  setwd("C:\\Users\\Zainab\\Desktop\\CS598\\TestCaseData")
+  for( i in 2:4)
+  {  
+  plot(case3_plots[,1],case3_plots[,i], ylim=c(0,1.2), ylab="Frequency", xlab= "Array length")
+  ttle=paste0("k=",i)
+  title(ttle)
+  savePlot(filename=ttle,type=c("jpg"),device=dev.cur())
+  }
+  
   case2_plots=matrix(0,length(len),4)
   names(mydata)
   for(i in 1:length(len)){
@@ -88,3 +125,28 @@ array_4[j,2]=count
   title("Mean k")
   plot(case2_plots[,1],case2_plots[,4], pch="#", col=2, xlab="length of array", ylab="mean score")
   title("Mean score")
+  
+  
+  
+  
+  ####
+  case2_itr_mtrx_595=data.frame(case2_itr_mtrx_595)
+  case2_itr_mtrx_595[,6]=case2_itr_mtrx_595[,4]/case2_itr_mtrx_595[,5]
+  for(i in 1:5)
+  case2_itr_mtrx_595[(1+(i-1)*(10)):(i*10),7]=i
+  colnames(case2_itr_mtrx_595)=c("run","iterations", "k", "sum", "max_sum","converge", "array")
+  par( mfrow = c( 2, 3 ) )
+  mydata=case2_itr_mtrx_595
+  
+  #plot(mydata$run[mydata$array==1], mydata$converge[mydata$array==1], col=1,xlim=c(1,10), ylim=c(0,1), xlab="Run", ylab= "Sum of run/Maximum Sum")
+  for (i in 1:5)
+  {
+    plot(mydata$run[mydata$array==i], mydata$converge[mydata$array==i], col=i  ,xlim=c(1,10), ylim=c(0,1), xlab="Run", ylab= "Sum of run / Maximum Sum")
+    points(which.max(mydata$converge[mydata$array==i]), max(mydata$converge[mydata$array==i]), pch=19, col=1)
+    tle=paste0("Array ", i)
+    title(tle)
+  }
+ 
+  legend(8,0.4, legend = 1:5, col=1:5, pch="__") 
+  title("Run with maximum return sum ")
+  
